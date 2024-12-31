@@ -21,8 +21,12 @@
  *  0  => true
  *  -5 => false
  */
+
 function isPositive(number) {
-  return !(number < 0);
+  if (number >= 0) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -39,10 +43,13 @@ function isPositive(number) {
  *  -0.1, 0, 0.2  => 0.2
  */
 function getMaxNumber(a, b, c) {
-  let max = a;
-  if (b > max) max = b;
-  if (c > max) max = c;
-  return max;
+  if (a > b) {
+    if (c > a) {
+      return c;
+    }
+    return a;
+  }
+  return b;
 }
 
 /**
@@ -64,15 +71,10 @@ function getMaxNumber(a, b, c) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
 function canQueenCaptureKing(queen, king) {
-  const qRow = queen[0];
-  const qCol = queen[1];
-  const kRow = king[0];
-  const kCol = king[1];
-
   return (
-    qRow === kRow ||
-    qCol === kCol ||
-    Math.abs(qRow - kRow) === Math.abs(qCol - kCol)
+    queen.x === king.x ||
+    queen.y === king.y ||
+    Math.abs(queen.x - king.x) === Math.abs(queen.y - king.y)
   );
 }
 
@@ -95,8 +97,18 @@ function canQueenCaptureKing(queen, king) {
  *  3, 0, 3   => false
  */
 function isIsoscelesTriangle(a, b, c) {
-  if (a + b <= c || a + c <= b || b + c <= a) return false; // Invalid triangle
-  return a === b || a === c || b === c;
+  if (a > 0 && b > 0 && c > 0) {
+    if (a === b && a + b > c) {
+      return true;
+    }
+    if (a === c && a + c > b) {
+      return true;
+    }
+    if (b === c && b + c > a) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -114,35 +126,30 @@ function isIsoscelesTriangle(a, b, c) {
  *  26  => XXVI
  */
 function convertToRomanNumerals(num) {
-  let result = '';
-  let number = num; // Use a separate variable to work with
-
-  while (number >= 10) {
-    result += 'X';
-    number -= 10;
+  if (num < 1 && num > 39) {
+    return 'Please enter a number between 1 and 39.';
   }
-
-  if (number >= 9) {
-    result += 'IX';
-    number -= 9;
+  let tens = num;
+  let romanNum = '';
+  while (tens >= 10) {
+    romanNum += 'X';
+    tens -= 10;
   }
-
-  if (number >= 5) {
-    result += 'V';
-    number -= 5;
+  if (tens >= 1 && tens <= 3) {
+    for (let i = 0; i < tens; i += 1) {
+      romanNum += 'I';
+    }
+  } else if (num === 4) {
+    romanNum += 'IV';
+  } else if (tens >= 5 && tens <= 8) {
+    romanNum += 'V';
+    for (let i = 0; i < tens - 5; i += 1) {
+      romanNum += 'I';
+    }
+  } else if (tens === 9) {
+    romanNum += 'IX';
   }
-
-  if (number >= 4) {
-    result += 'IV';
-    number -= 4;
-  }
-
-  while (number >= 1) {
-    result += 'I';
-    number -= 1;
-  }
-
-  return result;
+  return romanNum;
 }
 
 /**
