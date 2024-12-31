@@ -209,17 +209,13 @@ function convertNumberToString(numberStr) {
  *  'qweqwe'    => false
  */
 function isPalindrome(str) {
-  let left = 0;
-  let right = str.length - 1;
-
-  while (left < right) {
-    if (str[left] !== str[right]) {
+  let last = str.length - 1;
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] !== str[last]) {
       return false;
     }
-    left += 1;
-    right -= 1;
+    last -= 1;
   }
-
   return true;
 }
 
@@ -239,7 +235,7 @@ function isPalindrome(str) {
  */
 
 function getIndexOf(str, letter) {
-  for (let i = 0; i < str.length; i += 1) {
+  for (let i = 0; i < str.length - 1; i += 1) {
     if (str[i] === letter) {
       return i;
     }
@@ -263,12 +259,16 @@ function getIndexOf(str, letter) {
  *  12345, 6    => false
  */
 function isContainNumber(num, digit) {
-  let tempNum = num; // Assign the parameter to a new variable
-  while (tempNum > 0) {
-    if (tempNum % 10 === digit) {
+  let remainingNum = num;
+
+  while (remainingNum > 0) {
+    const lastDigit = remainingNum % 10;
+
+    if (lastDigit === digit) {
       return true;
     }
-    tempNum = Math.floor(tempNum / 10);
+
+    remainingNum = Math.floor(remainingNum / 10);
   }
   return false;
 }
@@ -287,24 +287,29 @@ function isContainNumber(num, digit) {
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
 function getBalanceIndex(arr) {
-  let totalSum = 0;
+  const { length } = arr;
 
-  for (let i = 0; i < arr.length; i += 1) {
-    totalSum += arr[i];
-  }
+  for (let i = 1; i < length - 1; i += 1) {
+    let leftSum = 0;
+    let rightSum = 0;
 
-  let leftSum = 0;
-
-  for (let i = 0; i < arr.length; i += 1) {
-    totalSum -= arr[i];
-
-    if (leftSum === totalSum) {
-      return i;
+    // Calculate the sum of elements to the left of index `i`
+    for (let j = 0; j < i; j += 1) {
+      leftSum += arr[j];
     }
 
-    leftSum += arr[i];
+    // Calculate the sum of elements to the right of index `i`
+    for (let k = i + 1; k < length; k += 1) {
+      rightSum += arr[k];
+    }
+
+    // Check if the sums are equal
+    if (leftSum === rightSum) {
+      return i;
+    }
   }
 
+  // Return -1 if no balance index is found
   return -1;
 }
 
